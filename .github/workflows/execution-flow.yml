@@ -73,7 +73,8 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
-      - name: Post to a Slack channel
+
+      - name: Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
