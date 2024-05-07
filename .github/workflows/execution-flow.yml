@@ -73,12 +73,6 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
-
-      - name: Use Jest Cache
-        uses: actions/cache@v3
-        with:
-          path: .jest-cache
-          key: jest-cache-${{ hashFiles('package-lock.json') }}
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.26.0
