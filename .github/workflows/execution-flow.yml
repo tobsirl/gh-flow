@@ -75,6 +75,8 @@ jobs:
         run: echo "Deploying..."
 
   slack:
+    needs: deploy
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Slack channel
