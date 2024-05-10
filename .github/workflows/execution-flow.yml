@@ -19,6 +19,25 @@ jobs:
         run: npm ci
       - name: Lint code
         run: npm run lint
+      - name: Slack channel
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: "C0712F56CNM"
+          status: SUCCESS
+          color: good
+
+      - name: Notify slack fail
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: "C0712F56CNM"
+          status: FAILED
+          color: danger
   test:
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +58,25 @@ jobs:
         with:
           name: test-report
           path: test.json
+      - name: Slack channel
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: "C0712F56CNM"
+          status: SUCCESS
+          color: good
+
+      - name: Notify slack fail
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: "C0712F56CNM"
+          status: FAILED
+          color: danger
   build:
     needs: [lint, test]
     runs-on: ubuntu-latest
