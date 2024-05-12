@@ -58,7 +58,7 @@ jobs:
         with:
           name: test-report
           path: test.json
-      - name: Slack channel
+      - name: Notify slack success
         if: success()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -111,28 +111,3 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
-
-  # slack:
-  #   needs: deploy
-  #   if: always()
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Slack channel
-  #       if: success()
-  #       env:
-  #         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-  #       uses: voxmedia/github-action-slack-notify-build@v1
-  #       with:
-  #         channel_id: "C0712F56CNM"
-  #         status: SUCCESS
-  #         color: good
-
-  #     - name: Notify slack fail
-  #       if: failure()
-  #       env:
-  #         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-  #       uses: voxmedia/github-action-slack-notify-build@v1
-  #       with:
-  #         channel_id: "C0712F56CNM"
-  #         status: FAILED
-  #         color: danger
