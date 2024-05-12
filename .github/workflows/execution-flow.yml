@@ -18,6 +18,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint code
+        id: lint
         run: npm run lint
       - name: Slack channel
         if: success()
@@ -28,6 +29,7 @@ jobs:
           channel_id: "C0712F56CNM"
           status: SUCCESS
           color: good
+          message_id: ${{ steps.lint.outputs.message_id }}
 
       - name: Notify slack fail
         if: failure()
