@@ -20,26 +20,26 @@ jobs:
       - name: Lint code
         id: lint
         run: npm run lint
-      - name: Slack channel
-        if: success()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel_id: "C0712F56CNM"
-          status: SUCCESS
-          color: good
-          message_id: ${{ steps.lint.outputs.message_id }}
+      # - name: Slack channel
+      #   if: success()
+      #   env:
+      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      #   uses: voxmedia/github-action-slack-notify-build@v1
+      #   with:
+      #     channel_id: "C0712F56CNM"
+      #     status: SUCCESS
+      #     color: good
+      #     message_id: ${{ steps.lint.outputs.message_id }}
 
-      - name: Notify slack fail
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel_id: "C0712F56CNM"
-          status: FAILED
-          color: danger
+      # - name: Notify slack fail
+      #   if: failure()
+      #   env:
+      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      #   uses: voxmedia/github-action-slack-notify-build@v1
+      #   with:
+      #     channel_id: "C0712F56CNM"
+      #     status: FAILED
+      #     color: danger
   test:
     runs-on: ubuntu-latest
     steps:
@@ -60,15 +60,34 @@ jobs:
         with:
           name: test-report
           path: test.json
-
-      - name: Report Status
-        if: always()
-        uses: ravsamhq/notify-slack-action@v1
-        with:
-          status: ${{ job.status }}
-          notify_when: "failure"
+      - name: Notify slack success
+        if: success()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: "C0712F56CNM"
+          status: SUCCESS
+          color: good
+
+      - name: Notify slack fail
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: "C0712F56CNM"
+          status: FAILED
+          color: danger
+
+      # - name: Report Status
+      #   if: always()
+      #   uses: ravsamhq/notify-slack-action@v1
+      #   with:
+      #     status: ${{ job.status }}
+      #     notify_when: "failure"
+      #   env:
+      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
   build:
     needs: [lint, test]
