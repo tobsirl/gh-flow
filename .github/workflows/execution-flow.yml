@@ -71,15 +71,24 @@ jobs:
       #     status: SUCCESS
       #     color: good
 
-      - name: Notify slack fail
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
+      # - name: Notify slack fail
+      #   if: failure()
+      #   env:
+      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      #   uses: voxmedia/github-action-slack-notify-build@v1
+      #   with:
+      #     channel_id: "C0712F56CNM"
+      #     status: FAILED
+      #     color: danger
+      - name: Report Status
+        if: always()
+        uses: ravsamhq/notify-slack-action@v1
         with:
-          channel_id: "C0712F56CNM"
-          status: FAILED
-          color: danger
+          status: ${{ job.status }}
+          notify_when: "failure"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BOT_TOKEN }}
+
   build:
     needs: [lint, test]
     runs-on: ubuntu-latest
